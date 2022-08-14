@@ -1,11 +1,14 @@
-
 import 'package:crypto_calculator/bloc/crypto_calculator_bloc/crypto_calculator_bloc.dart';
+import 'package:crypto_calculator/utils/constant.dart';
+import 'package:crypto_calculator/utils/helper_function.dart';
+import 'package:crypto_calculator/widgets/crypto_image_widget.dart';
 import 'package:crypto_calculator/widgets/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Calculator extends StatelessWidget {
-  Calculator({Key? key}) : super(key: key);
+  Calculator({Key? key, required this.selectedCurrency}) : super(key: key);
+  final String selectedCurrency;
   TextEditingController cryptoCoinController = TextEditingController();
 
   @override
@@ -27,13 +30,32 @@ class Calculator extends StatelessWidget {
             }, loaded: (exchange, blocCurrency) {
               return Column(
                 children: [
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  CryptoImageWidget(imageUrl: exchange.image),
+                  Text(exchange.name, style: titleTextStyle),
                   Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: TextField(
                       controller: cryptoCoinController,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Enter Crypto Amount',
+                      decoration: InputDecoration(
+                        prefixIcon: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                '  ${exchange.symbol}',
+                                style: titleTextStyle,
+                              ),
+                            ),
+                          ],
+                        ),
+                        hintText: '  Enter Crypto Amount',
+                        hintStyle: titleTextStyle.copyWith(
+                            color: Colors.grey, fontWeight: FontWeight.normal),
                         border: OutlineInputBorder(),
                       ),
                       onChanged: (value) {
@@ -49,7 +71,19 @@ class Calculator extends StatelessWidget {
                       },
                     ),
                   ),
-                  Text(blocCurrency)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Center(
+                        child: Text(
+                          HelperFunction.getCurrentPrice(
+                              currency: selectedCurrency, price: blocCurrency),
+                          style: titleTextStyle,
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               );
             });

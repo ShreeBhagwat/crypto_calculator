@@ -3,7 +3,6 @@ import 'package:crypto_calculator/bloc/crypto_calculator_bloc/crypto_calculator_
 import 'package:crypto_calculator/screens/calculator.dart';
 import 'package:crypto_calculator/screens/trending_screen.dart';
 import 'package:crypto_calculator/utils/constant.dart';
-import 'package:crypto_calculator/utils/helper_function.dart';
 import 'package:crypto_calculator/widgets/crypto_image_widget.dart';
 import 'package:crypto_calculator/widgets/high_low_widget.dart';
 import 'package:crypto_calculator/widgets/loader.dart';
@@ -94,7 +93,9 @@ class HomeScreen extends StatelessWidget {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (_) => Calculator()));
+                                        builder: (_) => Calculator(
+                                          selectedCurrency: blocCurrency,
+                                        )));
                               },
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
