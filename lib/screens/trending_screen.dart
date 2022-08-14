@@ -51,6 +51,7 @@ class TrendingScreen extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: NamePriceWidget(
+                            isLong: true,
                               name: trendingList[index].name,
                               currency: '฿ btc',
                               price: trendingList[index].price_btc),

@@ -7,11 +7,12 @@ class NamePriceWidget extends StatelessWidget {
     Key? key,
     required this.name,
     required this.currency,
-    required this.price,
+    required this.price, required this.isLong,
   }) : super(key: key);
   final String name;
   final String currency;
   final num price;
+  final bool isLong;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -22,7 +23,8 @@ class NamePriceWidget extends StatelessWidget {
           style: titleTextStyle,
         ),
         Text(HelperFunction.getCurrentPrice(
-            currency: currency, price: price.toString())),
+            currency: currency, 
+            price: isLong ? price.toStringAsFixed(12) : price.toString()),)
       ],
     );
   }

@@ -20,6 +20,7 @@ class CryptoCalculator extends StatelessWidget {
         BlocProvider<TrendingBlocBloc>(create: (_) => TrendingBlocBloc()),
       ],
       child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: LoginScreen(),
       ),
     );

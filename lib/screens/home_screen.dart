@@ -94,8 +94,8 @@ class HomeScreen extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (_) => Calculator(
-                                          selectedCurrency: blocCurrency,
-                                        )));
+                                              selectedCurrency: blocCurrency,
+                                            )));
                               },
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -115,6 +115,7 @@ class HomeScreen extends StatelessWidget {
                                         ),
                                         const SizedBox(width: 10),
                                         NamePriceWidget(
+                                            isLong: false,
                                             name: exchangeList[index].name,
                                             currency: blocCurrency,
                                             price: exchangeList[index]
