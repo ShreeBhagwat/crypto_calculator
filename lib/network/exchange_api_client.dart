@@ -1,4 +1,4 @@
-import 'package:crypto_calculator/model/exchange_model.dart';
+import 'package:crypto_calculator/model/exchange_model/exchange_model.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 part 'exchange_api_client.g.dart';

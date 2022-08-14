@@ -27,4 +27,5 @@ class Exchange with _$Exchange {
 
   factory Exchange.fromJson(Map<String, dynamic> json) =>
       _$ExchangeFromJson(json);
+
 }

@@ -1,10 +1,12 @@
-import 'package:crypto_calculator/bloc/exchange_cubit.dart';
-import 'package:crypto_calculator/model/exchange_model.dart';
+
+import 'package:crypto_calculator/bloc/crypto_calculator_bloc/crypto_calculator_bloc.dart';
+import 'package:crypto_calculator/widgets/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Calculator extends StatelessWidget {
-  const Calculator({Key? key}) : super(key: key);
+  Calculator({Key? key}) : super(key: key);
+  TextEditingController cryptoCoinController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -16,49 +18,43 @@ class Calculator extends StatelessWidget {
         centerTitle: false,
       ),
       body: SafeArea(
-        child: Center(
-            child: Column(
-          children: [
-            BlocConsumer<ExchangeCubit, ExchangeState>(
-                builder: (context, state) {
-              final Exchange exchange =
-                  BlocProvider.of<ExchangeCubit>(context).exchange!;
+        child: BlocBuilder<CryptoCalculatorBloc, CryptoCalculatorState>(
+          builder: (context, state) {
+            return state.when(initial: () {
+              return const CustomLoader(text: 'Loading...');
+            }, loading: () {
+              return const CustomLoader(text: 'Loading...');
+            }, loaded: (exchange, blocCurrency) {
               return Column(
                 children: [
-                  Row(
-                    children: [
-                      Text(
-                        '${BlocProvider.of<ExchangeCubit>(context).currency}',
-                        style: TextStyle(fontSize: 20),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: TextField(
+                      controller: cryptoCoinController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: 'Enter Crypto Amount',
+                        border: OutlineInputBorder(),
                       ),
-                      Text(
-                        '${exchange.symbol}',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      Text(
-                        '${exchange.current_price}',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ],
-                  ),
-                  TextField(
-                    decoration: InputDecoration(
-                      labelText: 'Enter amount',
+                      onChanged: (value) {
+                        if (value.length > 0) {
+                          BlocProvider.of<CryptoCalculatorBloc>(context).add(
+                              CryptoCalculatorEvent.setExchangeNumbers(
+                                  num.parse(value), exchange));
+                        } else {
+                          BlocProvider.of<CryptoCalculatorBloc>(context).add(
+                              CryptoCalculatorEvent.setExchangeNumbers(
+                                  num.parse('0'), exchange));
+                        }
+                      },
                     ),
-                    onChanged: (value) {
-                      BlocProvider.of<ExchangeCubit>(context)
-                          .getExchangeNumbers(int.parse(value));
-                    },
                   ),
+                  Text(blocCurrency)
                 ],
               );
-            }, listener: (context, state) {
-              Text(BlocProvider.of<ExchangeCubit>(context)
-                  .exchangeNumbers
-                  .toString());
-            }),
-          ],
-        )),
+            });
+          },
+        ),
       ),
     );
   }
