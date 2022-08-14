@@ -1,9 +1,14 @@
 import 'package:crypto_calculator/bloc/crypto_bloc/crypto_bloc_bloc.dart';
 import 'package:crypto_calculator/bloc/crypto_calculator_bloc/crypto_calculator_bloc.dart';
 import 'package:crypto_calculator/screens/calculator.dart';
+import 'package:crypto_calculator/screens/trending_screen.dart';
 import 'package:crypto_calculator/utils/constant.dart';
 import 'package:crypto_calculator/utils/helper_function.dart';
+import 'package:crypto_calculator/widgets/crypto_image_widget.dart';
+import 'package:crypto_calculator/widgets/high_low_widget.dart';
 import 'package:crypto_calculator/widgets/loader.dart';
+import 'package:crypto_calculator/widgets/name_price_widget.dart';
+import 'package:crypto_calculator/widgets/sr_number_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,7 +26,10 @@ class HomeScreen extends StatelessWidget {
             style: TextStyle(color: Colors.black)),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const TrendingScreen()));
+            },
             icon: const Icon(
               Icons.trending_up,
               color: Colors.black,
@@ -31,7 +39,6 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(
             width: 10,
           ),
-          const SizedBox(width: 10),
         ],
       ),
       body: SafeArea(
@@ -53,11 +60,8 @@ class HomeScreen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('Select Currency',
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black)),
+                          Text('Select Currency',
+                              style: titleTextStyle.copyWith(fontSize: 14)),
                           const SizedBox(width: 20),
                           DropdownButton(
                             value: blocCurrency,
@@ -83,9 +87,10 @@ class HomeScreen extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return InkWell(
                               onTap: () {
-                                BlocProvider.of<CryptoCalculatorBloc>(context).add(
-                                    CryptoCalculatorEvent.setSingleExchange(
-                                        exchangeList[index]));
+                                BlocProvider.of<CryptoCalculatorBloc>(context)
+                                    .add(
+                                        CryptoCalculatorEvent.setSingleExchange(
+                                            exchangeList[index]));
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -100,76 +105,23 @@ class HomeScreen extends StatelessWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: Text(
-                                            exchangeList[index]
-                                                .market_cap_rank
-                                                .toString(),
-                                            style: titleTextStyle.copyWith(
-                                                fontSize: 15),
-                                          ),
+                                        SrNumberWidget(
+                                          srNumber: exchangeList[index]
+                                              .market_cap_rank!,
                                         ),
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          child: Image.network(
-                                              exchangeList[index].image,
-                                              width: 50,
-                                              height: 50,
-                                              fit: BoxFit.cover),
+                                        CryptoImageWidget(
+                                          imageUrl: exchangeList[index].image,
                                         ),
                                         const SizedBox(width: 10),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              exchangeList[index].name,
-                                              style: titleTextStyle,
-                                            ),
-                                            Text(HelperFunction.getCurrentPrice(
-                                                currency: blocCurrency,
-                                                price: exchangeList[index]
-                                                    .current_price
-                                                    .toString())),
-                                          ],
-                                        ),
+                                        NamePriceWidget(
+                                            name: exchangeList[index].name,
+                                            currency: blocCurrency,
+                                            price: exchangeList[index]
+                                                .current_price!),
                                         const Spacer(),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Icon(Icons.arrow_drop_up_sharp,
-                                                    color: Colors.green[600]),
-                                                Text(
-                                                    exchangeList[index]
-                                                        .high_24h
-                                                        .toString(),
-                                                    style: const TextStyle(
-                                                        color: Colors.green,
-                                                        fontWeight:
-                                                            FontWeight.bold)),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                    Icons.arrow_drop_down_sharp,
-                                                    color: Colors.red[600]),
-                                                Text(
-                                                    exchangeList[index]
-                                                        .low_24h
-                                                        .toString(),
-                                                    style: const TextStyle(
-                                                        color: Colors.red,
-                                                        fontWeight:
-                                                            FontWeight.bold)),
-                                              ],
-                                            ),
-                                          ],
+                                        HighLowWidget(
+                                          high: exchangeList[index].high_24h!,
+                                          low: exchangeList[index].low_24h!,
                                         ),
                                         const SizedBox(width: 10),
                                       ],

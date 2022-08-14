@@ -1,4 +1,5 @@
 import 'package:crypto_calculator/model/exchange_model/exchange_model.dart';
+import 'package:crypto_calculator/model/trending_model/trending_model.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 part 'exchange_api_client.g.dart';
@@ -15,5 +16,6 @@ abstract class ExchangeApiClient {
       @Query('page') int page,
       @Query('sparkline') bool sparkline);
 
-      
+  @GET('/search/trending')
+  Future<dynamic> getTrendingData();
 }
